@@ -1,8 +1,8 @@
-[submodule "mathpaqs"]
+[submodule "deps/mathpaqs"]
 	path = deps/mathpaqs
 	url = https://github.com/zertovitch/mathpaqs
 	branch = master
-[submodule "qt5ada"]
+[submodule "deps/qt5ada"]
 	path = deps/qt5ada
 	url = https://github.com/ohenley/qt5ada
 	branch = master
