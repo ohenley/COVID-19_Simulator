@@ -47,7 +47,7 @@ Visual tool to simulate the Covid19 pandemic.
 - qt5ada : [custom git repo](https://github.com/ohenley/qt5ada) of https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html
 
 ## Building
-#### Windows
+#### Windows (using powershell-7)
 ```
 > git clone --recursive https://github.com/ohenley/covidsim.git
 > cd covidsim
