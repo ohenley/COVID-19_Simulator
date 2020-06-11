@@ -1,5 +1,9 @@
 # CovidSim
-Qt5 Covid19 simulator. Ada code under the hood. :astonished: 🤯 :metal:
+Qt5 Covid19 simulator. Ada code under the hood.     
+
+Ada! :astonished:    
+But Why!? 🤯    
+Because :metal:   
 
 ## Table of Contents
 <details>
