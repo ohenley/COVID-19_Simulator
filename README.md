@@ -35,7 +35,7 @@ Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
 
 ## Status
 - Works on MS-Windows-10
-- Not working on Linux (planned)
+- Not working on Linux (planned as Qt and Ada are both portable)
 
 ## Prerequisites
 - MS-Windows platform
