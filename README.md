@@ -42,12 +42,12 @@ Visual tool to simulate the Covid19 pandemic.
 - [gnat-ce compiler](https://www.adacore.com/download) 
 
 ## Dependencies
-#### git submodules
+### git submodules
 - mathpaqs : [fork](https://github.com/ohenley/mathpaqs) of https://github.com/zertovitch/mathpaqs
 - qt5ada : [custom git repo](https://github.com/ohenley/qt5ada) of https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html
 
 ## Building
-#### Windows
+### Windows
 ```
 > git clone --recursive https://github.com/ohenley/covidsim.git
 > cd covidsim
@@ -67,4 +67,4 @@ None so far.
 - Based on simulation work by https://github.com/zertovitch
 - Using a custom package version of qt5ada thick binding by [Leonid Dulman](https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html)
 
-A big thank to both!
+A big thanks to both!
