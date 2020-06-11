@@ -58,6 +58,7 @@ Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
 None so far.
 
 ## Usage
+#### MS-Windows-10 (using powershell-7)
 ```
 > cd deps/qt5ada/qt5/5.15/bin
 > ./covidsim.exe
