@@ -64,6 +64,6 @@ None so far.
 
 ## Acknowledgments
 - Based on simulation work by https://github.com/zertovitch
-- Using a custom package version of qt5ada thick binding by [Leonid Dulman](https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html)
+- Using a custom packaged version of qt5ada thick binding by [Leonid Dulman](https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html)
 
 A big thanks to both!
