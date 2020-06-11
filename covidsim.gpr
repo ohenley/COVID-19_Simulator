@@ -1,0 +1,10 @@
+project covidsim is
+    for Source_Dirs use ("src", "deps/mathpaqs/diff_eq/ode", "deps/qt5ada/src");
+    for Object_Dir use "obj";
+    for Exec_Dir use "deps/qt5ada/qt5/5.15/bin";
+    for Main use ("covidsim.adb");
+
+    package Linker is
+        for Default_Switches ("Ada") use ("-Ldeps\qt5ada\binaries\windows", "-lqt5c");
+    end Linker;
+end covidsim;
