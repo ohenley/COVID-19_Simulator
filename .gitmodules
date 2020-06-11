@@ -1,6 +1,6 @@
 [submodule "deps/mathpaqs"]
 	path = deps/mathpaqs
-	url = https://github.com/zertovitch/mathpaqs
+	url = https://github.com/ohenley/mathpaqs
 	branch = master
 [submodule "deps/qt5ada"]
 	path = deps/qt5ada
