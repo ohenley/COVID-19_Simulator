@@ -10,10 +10,8 @@ Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
 3. [Prerequisites](#Prerequisites)  
 4. [Dependencies](#Dependencies)
 5. [Building](#Building)
-   1. [MS-Windows-10](#MS-Windows-10)
 6. [Limitations](#Limitations)
 7. [Usage](#Usage)
-   1. [MS-Windows-10](#MS-Windows-10)
 8. [Acknowledgments](#Acknowledgments)
 
 </details>
