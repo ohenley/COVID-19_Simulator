@@ -1,5 +1,5 @@
 # CovidSim
-Visual tool to simulate the Covid19 pandemic. :point_right: Ada code under the hood. :astonished: :metal:
+Visual tool to simulate the Covid19 pandemic. Ada code under the hood. :astonished: :metal:
 
 ## Table of Contents
 <details>
