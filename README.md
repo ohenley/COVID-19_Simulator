@@ -1,9 +1,16 @@
 # CovidSim
-Qt5 COVID-19 simulator. Ada code under the hood.     
+Qt5 COVID-19 simulator. Ada code under the hood.    
+
+<div align="center">
+
+<a>
 
 Ada! :astonished: but, but why!? 🤯   
     
 ... :metal: because :metal: ...  
+</a>
+  
+</div>
 
 ## Table of Contents
 <details>
