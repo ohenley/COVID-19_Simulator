@@ -37,12 +37,12 @@ Ada! :astonished: but why not C, C++, Golang or Rust!? 🤯
 <!---![alt text](https://github.com/ohenley/readme-template/blob/master/thug_war.png)--->
 
 ## Status
-- Works on MS-Windows-10
+- Works on MS-Windows-10 using gnat-ce 2019
 - Not working on Linux (planned as Qt and Ada are both portable)
 
 ## Prerequisites
 - MS-Windows platform
-- [gnat-ce compiler](https://www.adacore.com/download) 
+- [gnat-ce](https://www.adacore.com/download) 2019 and up.
 
 ## Dependencies
 #### git submodules
