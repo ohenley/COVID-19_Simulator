@@ -2,8 +2,8 @@
 Qt5 Covid19 simulator. Ada code under the hood.     
 
 Ada! :astonished:    
-But Why!? 🤯    
-Because :metal:   
+... but why?.. 🤯    
+... because :metal:   
 
 ## Table of Contents
 <details>
