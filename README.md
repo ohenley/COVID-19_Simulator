@@ -38,7 +38,7 @@ Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
 - Not working on Linux (planned)
 
 ## Prerequisites
-- win32 platform
+- Microsoft Windows platform
 - [gnat-ce compiler](https://www.adacore.com/download) 
 
 ## Dependencies
