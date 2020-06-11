@@ -34,11 +34,11 @@ Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
 <!---![alt text](https://github.com/ohenley/readme-template/blob/master/thug_war.png)--->
 
 ## Status
-- Works on Windows 10
+- Works on MS-Windows-10
 - Not working on Linux (planned)
 
 ## Prerequisites
-- Microsoft Windows platform
+- MS-Windows platform
 - [gnat-ce compiler](https://www.adacore.com/download) 
 
 ## Dependencies
@@ -47,7 +47,7 @@ Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
 - qt5ada : [custom git repo](https://github.com/ohenley/qt5ada) of https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html
 
 ## Building
-#### Windows (using powershell-7)
+#### MS-Windows-10 (using powershell-7)
 ```
 > git clone --recursive https://github.com/ohenley/covidsim.git
 > cd covidsim
