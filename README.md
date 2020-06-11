@@ -1,7 +1,7 @@
 # CovidSim
 Qt5 COVID-19 simulator. Ada code under the hood.     
 
-Ada! :astonished: but why not my favorite language!? 🤯   
+Ada! :astonished: but why not my x favorite language!? 🤯   
     
 ... :metal: because :metal: ...  
 
@@ -29,8 +29,7 @@ Ada! :astonished: but why not my favorite language!? 🤯
   
 </div>
 
-> Ada driven.  
-> Qt5 driven.  
+> Ada driven. Qt5 driven.
 > Based on computations by https://github.com/zertovitch/mathpaqs.  
 > Implementing https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30260-9/fulltext.
 
@@ -42,7 +41,7 @@ Ada! :astonished: but why not my favorite language!? 🤯
 
 ## Prerequisites
 - MS-Windows platform
-- [gnat-ce](https://www.adacore.com/download) 2019 and up.
+- [gnat-ce](https://www.adacore.com/download) 2019.
 
 ## Dependencies
 #### git submodules
