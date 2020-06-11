@@ -1,5 +1,9 @@
 # CovidSim
-Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
+Qt5 COVID-19 simulator. Ada code under the hood.     
+
+Ada! :astonished: but why not C, C++, Golang or Rust!? 🤯   
+    
+... :metal: because :metal: ...  
 
 ## Table of Contents
 <details>
@@ -10,7 +14,6 @@ Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
 3. [Prerequisites](#Prerequisites)  
 4. [Dependencies](#Dependencies)
 5. [Building](#Building)
-   1. [Windows](#Windows)
 6. [Limitations](#Limitations)
 7. [Usage](#Usage)
 8. [Acknowledgments](#Acknowledgments)
@@ -34,11 +37,11 @@ Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
 <!---![alt text](https://github.com/ohenley/readme-template/blob/master/thug_war.png)--->
 
 ## Status
-- Works on Windows 10
-- Not working on Linux (planned)
+- Works on MS-Windows-10
+- Not working on Linux (planned as Qt and Ada are both portable)
 
 ## Prerequisites
-- win32 platform
+- MS-Windows platform
 - [gnat-ce compiler](https://www.adacore.com/download) 
 
 ## Dependencies
@@ -47,7 +50,7 @@ Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
 - qt5ada : [custom git repo](https://github.com/ohenley/qt5ada) of https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html
 
 ## Building
-#### Windows (using powershell-7)
+#### MS-Windows-10 (using powershell-7)
 ```
 > git clone --recursive https://github.com/ohenley/covidsim.git
 > cd covidsim
@@ -58,6 +61,7 @@ Qt5 Covid19 simulator. Ada code under the hood. :astonished: :metal:
 None so far.
 
 ## Usage
+#### MS-Windows-10 (using powershell-7)
 ```
 > cd deps/qt5ada/qt5/5.15/bin
 > ./covidsim.exe
