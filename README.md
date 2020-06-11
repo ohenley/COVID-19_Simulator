@@ -25,10 +25,11 @@ Visual tool to simulate the Covid19 pandemic.
 </a>
   
 </div>
-> Ada code    
-> Qt5 driven    
-> Based on computations by https://github.com/zertovitch/mathpaqs    
-> Implementing https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30260-9/fulltext     
+
+> Ada code  
+> Qt5 driven  
+> Based on computations by https://github.com/zertovitch/mathpaqs  
+> Implementing https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30260-9/fulltext
 
 <!---![alt text](https://github.com/ohenley/readme-template/blob/master/thug_war.png)--->
 
