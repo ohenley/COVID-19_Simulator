@@ -1,7 +1,7 @@
 # CovidSim
 Qt5 COVID-19 simulator. Ada code under the hood.     
 
-Ada! :astonished: but why not C, C++, Golang or Rust!? 🤯   
+Ada! :astonished: but why not my favorite language!? 🤯   
     
 ... :metal: because :metal: ...  
 
