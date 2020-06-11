@@ -37,11 +37,11 @@ Visual tool to simulate the Covid19 pandemic.
 
 ## Prerequisites
 - win32 platform
-- gnat compiler
+- [gnat-ce compiler](https://www.adacore.com/download) 
 
 ## Dependencies
-git submodules:
-- mathpaqs : fork of https://github.com/zertovitch/mathpaqs
+#### git submodules
+- mathpaqs : [fork](https://github.com/ohenley/mathpaqs) of https://github.com/zertovitch/mathpaqs
 - qt5Ada : https://github.com/ohenley/qt5ada
 
 ## Building
@@ -53,7 +53,7 @@ git submodules:
 ```
 
 ## Limitations
-Only 3 consecutive messages are broadcast before being banned for the day.
+None so far.
 
 ## Usage
 ```
@@ -63,6 +63,6 @@ Only 3 consecutive messages are broadcast before being banned for the day.
 
 ## Acknowledgments
 - Based on simulation work by https://github.com/zertovitch
-- Using a custom package version of qt5ada thick binding by Leonid Dulman
+- Using a custom package version of qt5ada thick binding by [Leonid Dulman](https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html)
 
 A big thank to both!
