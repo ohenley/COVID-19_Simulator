@@ -1,7 +1,7 @@
 # CovidSim
 Qt5 COVID-19 simulator. Ada code under the hood.     
 
-Ada! :astonished: but why not C, C++, Golang or Rust!? 🤯   
+Ada! :astonished: but, but why!? 🤯   
     
 ... :metal: because :metal: ...  
 
@@ -29,20 +29,19 @@ Ada! :astonished: but why not C, C++, Golang or Rust!? 🤯
   
 </div>
 
-> Ada driven.  
-> Qt5 driven.  
+> Ada driven. Qt5 driven.
 > Based on computations by https://github.com/zertovitch/mathpaqs.  
 > Implementing https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30260-9/fulltext.
 
 <!---![alt text](https://github.com/ohenley/readme-template/blob/master/thug_war.png)--->
 
 ## Status
-- Works on MS-Windows-10
+- Works on MS-Windows-10 using gnat-ce 2019
 - Not working on Linux (planned as Qt and Ada are both portable)
 
 ## Prerequisites
 - MS-Windows platform
-- [gnat-ce compiler](https://www.adacore.com/download) 
+- [gnat-ce](https://www.adacore.com/download) 2019.
 
 ## Dependencies
 #### git submodules
