@@ -1,7 +1,7 @@
 # CovidSim
 Qt5 COVID-19 simulator. Ada code under the hood.     
 
-Ada! :astonished: but why not my x favorite language!? 🤯   
+Ada! :astonished: but, but why!? 🤯   
     
 ... :metal: because :metal: ...  
 
