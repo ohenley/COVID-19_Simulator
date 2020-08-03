@@ -1,9 +1,5 @@
 # CovidSim
-Qt5 COVID-19 simulator. Ada code under the hood.     
-
-Ada! :astonished: but, but why!? 🤯   
-    
-... :metal: because :metal: ...  
+Qt5 COVID-19 simulator. Ada code under the hood. :astonished: 🤯 :metal:
 
 ## Table of Contents
 <details>
@@ -29,19 +25,20 @@ Ada! :astonished: but, but why!? 🤯
   
 </div>
 
-> Ada driven. Qt5 driven.
+> Ada driven. Qt5 driven.  
 > Based on computations by https://github.com/zertovitch/mathpaqs.  
 > Implementing https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30260-9/fulltext.
 
 <!---![alt text](https://github.com/ohenley/readme-template/blob/master/thug_war.png)--->
 
 ## Status
-- Works on MS-Windows-10 using gnat-ce 2019
+- Feature complete.
+- Works on MS-Windows-10
 - Not working on Linux (planned as Qt and Ada are both portable)
 
 ## Prerequisites
 - MS-Windows platform
-- [gnat-ce](https://www.adacore.com/download) 2019.
+- [gnat-ce](https://www.adacore.com/download) (tested with 2019, 2020).
 
 ## Dependencies
 #### git submodules
@@ -49,7 +46,7 @@ Ada! :astonished: but, but why!? 🤯
 - qt5ada : [custom git repo](https://github.com/ohenley/qt5ada) of https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html
 
 ## Building
-#### MS-Windows-10 (using powershell-7)
+#### MS-Windows-10
 ```
 > git clone --recursive https://github.com/ohenley/covidsim.git
 > cd covidsim
@@ -60,7 +57,7 @@ Ada! :astonished: but, but why!? 🤯
 None so far.
 
 ## Usage
-#### MS-Windows-10 (using powershell-7)
+#### MS-Windows-10
 ```
 > cd deps/qt5ada/qt5/5.15/bin
 > ./covidsim.exe
@@ -68,6 +65,6 @@ None so far.
 
 ## Acknowledgments
 - Based on simulation work by https://github.com/zertovitch
-- Using a custom package version of qt5ada thick binding by [Leonid Dulman](https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html)
+- Using a custom packaged version of qt5ada thick binding by [Leonid Dulman](https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html)
 
 A big thanks to both!
