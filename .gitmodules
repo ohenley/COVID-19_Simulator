@@ -6,3 +6,6 @@
 	path = deps/qt5ada
 	url = https://github.com/ohenley/qt5ada
 	branch = master
+[submodule "deps/xph_covid19"]
+	path = deps/xph_covid19
+	url = https://github.com/ohenley/xph_covid19

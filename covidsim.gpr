@@ -1,7 +1,10 @@
+with "deps/xph_covid19/xph_covid19.gpr";
+
 project covidsim is
     for Source_Dirs use ("src", "deps/mathpaqs/diff_eq/ode", "deps/qt5ada/src");
     for Object_Dir use "obj";
     for Exec_Dir use "deps/qt5ada/qt5/5.15/bin";
+    --for Exec_Dir use "bin";
     for Main use ("covidsim.adb");
 
     package Linker is
