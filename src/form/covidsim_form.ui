@@ -129,7 +129,7 @@
          </widget>
         </item>
         <item row="11" column="0">
-         <widget class="QCheckBox" name="zoom_search">
+         <widget class="QCheckBox" name="refine_search">
           <property name="text">
            <string>Refine Equation Unknowns Search</string>
           </property>
@@ -262,7 +262,7 @@
          </widget>
         </item>
         <item row="16" column="0" colspan="3">
-         <widget class="QGroupBox" name="refine_search">
+         <widget class="QGroupBox" name="refine_search_group">
           <property name="title">
            <string>Refine Search Parameters</string>
           </property>

@@ -75,7 +75,7 @@ package body xph_model is
    end_date_value : QDateEditH;
    steps_value : QSpinBoxH;
    forecast_days_value : QSpinBoxH;
-   minimize_by_density_value : QCheckBoxH;
+   minimize_by_density : QCheckBoxH;
 
    --timer : QTimerH;
 
@@ -178,7 +178,7 @@ package body xph_model is
       end_date_value := QDateEditH (QObject_findChild (QObjectH (form), s2qs ("end_date_value")));
       steps_value := QSpinBoxH (QObject_findChild (QObjectH (form), s2qs ("steps_value")));
       forecast_days_value := QSpinBoxH (QObject_findChild (QObjectH (form), s2qs ("forecast_days_value")));
-      minimize_by_density_value := QCheckBoxH (QObject_findChild (QObjectH (form), s2qs ("minimize_by_density_value")));
+      minimize_by_density := QCheckBoxH (QObject_findChild (QObjectH (form), s2qs ("minimize_by_density")));
 
       init_country_choices;
 
@@ -232,8 +232,7 @@ package body xph_model is
       size : integer := i*j*k*l*m;
       covid_data : country_entries_array := to_country_entries_array (country_entries);
       model : model_parameters;
-      minimize_by_density_state : QtCheckState :=  QCheckBox_checkState (minimize_by_density_value);
-      minimize_by_density : boolean;
+      minimize_by_density_state : QtCheckState :=  QCheckBox_checkState (minimize_by_density);
       ua1 : uarray_access := new unknowns_array (1 .. size);
       ub1 : uarray_access := new unknowns_array (1 .. size);
       ub2 : uarray_access := new unknowns_array (1 .. size);
@@ -258,7 +257,6 @@ package body xph_model is
                       ssrates,
                       ssrates_by_density);
 
-      minimize_by_density := minimize_by_density_state = QtChecked;
       characterize_best_model (model,
                                ua1,
                                ub1,
@@ -267,7 +265,7 @@ package body xph_model is
                                uk2,
                                ssrates,
                                ssrates_by_density,
-                               minimize_by_density);
+                               minimize_by_density_state = QtChecked);
       show_model_unknows (model);
 
 
