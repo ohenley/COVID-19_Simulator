@@ -38,6 +38,7 @@ Qt5 COVID-19 simulator. Ada code under the hood. :astonished: 🤯 :metal:
 
 ## Prerequisites
 - MS-Windows platform
+- [git](https://git-scm.com/download/win)
 - [gnat-ce](https://www.adacore.com/download) (tested with 2019, 2020).
 
 ## Dependencies
