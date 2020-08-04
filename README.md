@@ -26,8 +26,8 @@ Qt5 COVID-19 simulator. Ada code under the hood. :astonished: 🤯 :metal:
 </div>
 
 > Ada driven. Qt5 driven.  
-> Lancet engine based on computations by https://github.com/zertovitch/mathpaqs.  
-> XPH Pharmaceutical engine based on computations by https://github.com/ohenley/xph_covid19.
+> **Lancet** engine based on computations by https://github.com/zertovitch/mathpaqs.  
+> **XPH Pharmaceutical** engine based on computations by https://github.com/ohenley/xph_covid19.
 > Implementing https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30260-9/fulltext.
 
 <!---![alt text](https://github.com/ohenley/readme-template/blob/master/thug_war.png)--->
