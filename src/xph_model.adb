@@ -169,7 +169,7 @@ package body xph_model is
 
       -- forecast
       for f of country_forecast_entries loop
-         QXYSeries_append (country_forecast, qreal(f.day_index), qreal(f.cumulative_cases));
+         QXYSeries_append (country_forecast, qreal(f.day_index), qreal(f.cumulative_cases_simulated));
       end loop;
 
 
