@@ -29,6 +29,7 @@ with Qt.QButton; use Qt.QButton;
 with Qt.QStackedLayout; use Qt.QStackedLayout;
 with Qt.QStackedWidget; use Qt.QStackedWidget;
 with Qt.QDateTime; use Qt.QDateTime;
+with Qt.QCheckBox; use Qt.QCheckBox;
 
 
 with covid_19; use covid_19;
@@ -189,6 +190,7 @@ package body CovidSimForm is
       start_date_value : QDateEditH := QDateEditH (QObject_findChild (QObjectH (covidsim_form), s2qs ("start_date_value")));
       end_date_value : QDateEditH := QDateEditH (QObject_findChild (QObjectH (covidsim_form), s2qs ("end_date_value")));
       forecast_days_value : QSpinBoxH := QSpinBoxH (QObject_findChild (QObjectH (covidsim_form), s2qs ("forecast_days_value")));
+      refine_search : QCheckBoxH := QCheckBoxH (QObject_findChild (QObjectH (covidsim_form), s2qs ("refine_search")));
    begin
 
       QAbstractButton_signal_slot_clicked (compute_xph_button, slot_compute_xph'access);
@@ -196,6 +198,7 @@ package body CovidSimForm is
       QDateEdit_signal_slot_userDateChanged (start_date_value, slot_start_date_changed'access);
       QDateEdit_signal_slot_userDateChanged (end_date_value, slot_end_date_changed'access);
       QSpinBox_signal_slot_valueChanged (forecast_days_value, slot_change_forecast_days'access);
+      QCheckBox_signal_slot_stateChanged (refine_search, slot_change_refine_search'access);
 
       init_model (form, chart);
    end;

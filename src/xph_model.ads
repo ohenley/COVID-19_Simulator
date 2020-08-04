@@ -18,22 +18,22 @@ package xph_model is
 
 
    procedure slot_compute_xph;
-   pragma Convention(C, slot_compute_xph);
+   pragma Convention (C, slot_compute_xph);
 
-   procedure slot_change_country_choice(country_name : QStringH);
-   pragma Convention(C, slot_change_country_choice);
+   procedure slot_change_country_choice (country_name : QStringH);
+   pragma Convention (C, slot_change_country_choice);
 
    procedure slot_start_date_changed (date: QDateH);
-   pragma Convention(C, slot_start_date_changed);
+   pragma Convention (C, slot_start_date_changed);
 
    procedure slot_end_date_changed (date: QDateH);
-   pragma Convention(C, slot_end_date_changed);
+   pragma Convention (C, slot_end_date_changed);
 
-   procedure slot_change_forecast_days(foracast_days_val: Integer);
-   pragma Convention(C, slot_change_forecast_days);
+   procedure slot_change_forecast_days (foracast_days_val: Integer);
+   pragma Convention (C, slot_change_forecast_days);
 
-   --procedure update;
-   --pragma convention(C,update);
+   procedure slot_change_refine_search (state: integer);
+   pragma Convention (C, slot_change_refine_search);
 
 
 end xph_model;

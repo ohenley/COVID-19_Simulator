@@ -38,7 +38,6 @@ with Qt.QGradient;       use Qt.QGradient;
 with Qt.QAbstractSeries; use Qt.QAbstractSeries;
 
 -- TODO:
--- 1. 12/31/2019 is a problematic date. (does not want to move at any day, month or year because its is always more difference than what is legit -> end_day-start_day) start one day after. Sanitize data
 -- 2. in slot_compute_xph, find start_day_index from start_date and end_day_index from end_date
 -- 3. debug smallest ssrates ... they are way too high
 -- 4. generalize first pass and zoom
@@ -66,6 +65,7 @@ package body xph_model is
 
 
    country_entries : country_entries_vector.vector;
+   country_forecast_entries : country_entries_vector.vector;
 
    chart : QChartH;
    form : QWidgetH;
@@ -108,7 +108,7 @@ package body xph_model is
    end;
 
 
-   procedure update_ground_truth_chart is
+   procedure update_chart is
       current_index : integer := QComboBox_currentIndex (country_choice);
       c : country := country'val(current_index);
 
@@ -122,10 +122,13 @@ package body xph_model is
       country_ground_truth_date_range : QSeriesH;
       country_ground_truth_last : QSeriesH;
 
+      country_forecast : QSeriesH;
+
       procedure init_series is
-         pen_first : QPenH := QPen_create(QColor_create(0,255,255));
+         pen_first : QPenH := QPen_create(QColor_create(0,255,0));
          pen_date_range : QPenH := QPen_create(QColor_create(255,0,0));
-         pen_last : QPenH := QPen_create(QColor_create(0,255,255));
+         pen_last : QPenH := QPen_create(QColor_create(0,255,0));
+         pen_forecast: QPenH := QPen_create(QColor_create(255,255,0));
       begin
          country_ground_truth_first := QLineSeries_create;
          QPen_setWidth(pen_first, 3);
@@ -138,6 +141,10 @@ package body xph_model is
          country_ground_truth_last := QLineSeries_create;
          QPen_setWidth(pen_last, 3);
          QAreaSeries_setPen(country_ground_truth_last, pen_last);
+
+         country_forecast := QLineSeries_create;
+         QPen_setWidth(pen_forecast, 3);
+         QAreaSeries_setPen(country_forecast, pen_forecast);
       end;
 
    begin
@@ -147,6 +154,7 @@ package body xph_model is
 
       init_series;
 
+      -- ground truths
       for e of country_entries loop
 
          if ada.calendar.arithmetic."-" (start_time, e.date) > 0 then
@@ -159,9 +167,16 @@ package body xph_model is
 
       end loop;
 
+      -- forecast
+      for f of country_forecast_entries loop
+         QXYSeries_append (country_forecast, qreal(f.day_index), qreal(f.cumulative_cases));
+      end loop;
+
+
       QChart_addSeries (chart, country_ground_truth_first);
       QChart_addSeries (chart, country_ground_truth_date_range);
       QChart_addSeries (chart, country_ground_truth_last);
+      QChart_addSeries (chart, country_forecast);
 
       QChart_createDefaultAxes (chart);
 
@@ -176,6 +191,7 @@ package body xph_model is
       country_choice := QComboBoxH (QObject_findChild (QObjectH (form), s2qs ("country_choice")));
       start_date_value := QDateEditH (QObject_findChild (QObjectH (form), s2qs ("start_date_value")));
       end_date_value := QDateEditH (QObject_findChild (QObjectH (form), s2qs ("end_date_value")));
+
       steps_value := QSpinBoxH (QObject_findChild (QObjectH (form), s2qs ("steps_value")));
       forecast_days_value := QSpinBoxH (QObject_findChild (QObjectH (form), s2qs ("forecast_days_value")));
       minimize_by_density := QCheckBoxH (QObject_findChild (QObjectH (form), s2qs ("minimize_by_density")));
@@ -224,8 +240,6 @@ package body xph_model is
       QDateTimeEdit_setMinimumDate (end_date_value, minimum_end_date);
    end;
 
-
-
    procedure slot_compute_xph is
       c : country := country'val(QComboBox_currentIndex (country_choice));
       i,j,k,l,m : integer := QSpinBox_value (steps_value) + 1;
@@ -241,6 +255,9 @@ package body xph_model is
 
       ssrates : uarray_access := new unknowns_array (1 .. size);
       ssrates_by_density : uarray_access := new unknowns_array (1 .. size);
+
+      forecast_value : integer := QSpinBox_value (forecast_days_value);
+      forecast_ce : country_entries_array (1 .. forecast_value);
    begin
 
       build_search_set (steps, u_range, ua1, ub1, ub2, uk1, uk2);
@@ -266,8 +283,17 @@ package body xph_model is
                                ssrates,
                                ssrates_by_density,
                                minimize_by_density_state = QtChecked);
+
       show_model_unknows (model);
 
+      compute_simulated_rate (c, start_day_index, covid_data, model);
+
+      country_forecast_entries.clear;
+      compute_forecast (c, covid_data, forecast_ce, model);
+      country_forecast_entries := to_country_entries_vector (forecast_ce);
+
+      update_chart;
+      update_forecast_range_chart;
 
    end;
 
@@ -277,9 +303,21 @@ package body xph_model is
       c : country := country'val(current_index);
       raw_ce : country_entries_array := get_country_data (data_filename, c);
       ce : country_entries_array := sanitize_covid_data (raw_ce, all_countries (c));
+
+      function filter_out_toxic_date_time return country_entries_vector.vector is
+         toxic_date : Time := time_of (2019, 12, 31);
+      begin
+         if ce (ce'first).date = toxic_date then
+            return to_country_entries_vector (ce (ce'first + 1 .. ce'last));
+         else
+            return to_country_entries_vector (ce);
+         end if;
+      end;
    begin
 
-      country_entries := to_country_entries_vector (ce);
+      country_forecast_entries.clear;
+
+      country_entries := filter_out_toxic_date_time;
 
       -- date
       set_initial_date_limits;
@@ -287,7 +325,7 @@ package body xph_model is
 
       -- chart
       --init_chart;
-      update_ground_truth_chart;
+      update_chart;
       update_forecast_range_chart;
 
    end;
@@ -296,7 +334,7 @@ package body xph_model is
    begin
       --init_chart;
       update_min_max_date_limits;
-      update_ground_truth_chart;
+      update_chart;
       update_forecast_range_chart;
    end;
 
@@ -304,7 +342,7 @@ package body xph_model is
    begin
       --init_chart;
       update_min_max_date_limits;
-      update_ground_truth_chart;
+      update_chart;
       update_forecast_range_chart;
    end;
 
@@ -312,6 +350,17 @@ package body xph_model is
    begin
       update_forecast_range_chart;
    end;
+
+   procedure slot_change_refine_search (state: integer) is
+      refine_search_group : QGroupBoxH := QGroupBoxH (QObject_findChild (QObjectH (form), s2qs ("refine_search_group")));
+   begin
+      if state = 0 then
+         QWidget_setEnabled (QWidgetH (refine_search_group), false);
+      else
+         QWidget_setEnabled (QWidgetH (refine_search_group), true);
+      end if;
+   end;
+
 
 end xph_model;
 
