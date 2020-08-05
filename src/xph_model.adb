@@ -38,31 +38,16 @@ with Qt.QGradient;       use Qt.QGradient;
 with Qt.QAbstractSeries; use Qt.QAbstractSeries;
 
 -- TODO:
--- 2. in slot_compute_xph, find start_day_index from start_date and end_day_index from end_date
--- 3. debug smallest ssrates ... they are way too high
--- 4. generalize first pass and zoom
--- 5. implement progress bar, feedback and cancel.
-
+-- 1. implement progress bar, feedback and cancel.
+-- 2. proper legend
+-- 3. redraw ui when changing country
 
 package body xph_model is
 
    data_filename : string := "../../../../../deps/xph_covid19/data/covid19.csv";
 
-   --c : country;
-   start_day_index : integer := 68; -- start day, from the beginning
-   end_day_index : integer := 163; -- end day for special cases
-   steps : integer := 20;
-   --minimize_by_density : boolean := false;
-   zoom_factor : float := 4.0;
-   minimal_improvement_percentage : float := 0.3;
-   fore_term : integer := 400; -- days total (data+forecast)
-   bend_percent : float := 0.85;
-
-
-
    bend : integer := 1; -- array index for bend in forecast_ce
    first_case : integer := 6; -- arr. index in forecast_ce when 1'st case appeared
-
 
    country_entries : country_entries_vector.vector;
    country_forecast_entries : country_entries_vector.vector;
@@ -77,7 +62,9 @@ package body xph_model is
    forecast_days_value : QSpinBoxH;
    minimize_by_density : QCheckBoxH;
 
-   --timer : QTimerH;
+   refine_search_group : QGroupBoxH;
+   zoom_factor_value : QDoubleSpinBoxH;
+   minimal_improvement_percentage_value : QDoubleSpinBoxH;
 
    procedure init_country_choices is
       countries : QStringListH  := QStringList_create;
@@ -182,6 +169,12 @@ package body xph_model is
 
    end;
 
+   procedure reset_chart is
+   begin
+      country_forecast_entries.clear;
+      update_chart;
+      update_forecast_range_chart;
+   end;
 
    procedure init_model (form_widget: QWidgetH; chart_widget : QChartH) is
    begin
@@ -195,6 +188,10 @@ package body xph_model is
       steps_value := QSpinBoxH (QObject_findChild (QObjectH (form), s2qs ("steps_value")));
       forecast_days_value := QSpinBoxH (QObject_findChild (QObjectH (form), s2qs ("forecast_days_value")));
       minimize_by_density := QCheckBoxH (QObject_findChild (QObjectH (form), s2qs ("minimize_by_density")));
+
+      refine_search_group := QGroupBoxH (QObject_findChild (QObjectH (form), s2qs ("refine_search_group")));
+      zoom_factor_value := QDoubleSpinBoxH (QObject_findChild (QObjectH (form), s2qs ("zoom_factor_value")));
+      minimal_improvement_percentage_value := QDoubleSpinBoxH (QObject_findChild (QObjectH (form), s2qs ("minimal_improvement_percentage_value")));
 
       init_country_choices;
 
@@ -242,11 +239,39 @@ package body xph_model is
 
    procedure slot_compute_xph is
       c : country := country'val(QComboBox_currentIndex (country_choice));
-      i,j,k,l,m : integer := QSpinBox_value (steps_value) + 1;
+      steps : integer := QSpinBox_value (steps_value);
+      i,j,k,l,m : integer := steps + 1;
       size : integer := i*j*k*l*m;
+
       covid_data : country_entries_array := to_country_entries_array (country_entries);
+
+      start_date : QDateH := QDateTimeEdit_date (start_date_value);
+      start_time : Time := time_of (QDate_year (start_date), QDate_month (start_date), QDate_day (start_date));
+
+      end_date : QDateH := QDateTimeEdit_date (end_date_value);
+      end_time : Time := time_of (QDate_year (end_date), QDate_month (end_date), QDate_day (end_date));
+
+
+      function get_date_index (date_time : time) return integer is
+      begin
+         for i in covid_data'range loop
+            if covid_data (i).date = date_time then
+               return integer(covid_data (i).day_index);
+            end if;
+         end loop;
+
+         return -1;
+      end;
+
+
+      start_day_index : integer := get_date_index (start_time);
+
+      end_day_index : integer := get_date_index (end_time);
+
+
       model : model_parameters;
       minimize_by_density_state : QtCheckState :=  QCheckBox_checkState (minimize_by_density);
+
       ua1 : uarray_access := new unknowns_array (1 .. size);
       ub1 : uarray_access := new unknowns_array (1 .. size);
       ub2 : uarray_access := new unknowns_array (1 .. size);
@@ -258,10 +283,16 @@ package body xph_model is
 
       forecast_value : integer := QSpinBox_value (forecast_days_value);
       forecast_ce : country_entries_array (1 .. forecast_value);
+      refine_search : boolean := QWidget_isEnabled (QWidgetH (refine_search_group));
+      converging : boolean;
    begin
 
-      build_search_set (steps, u_range, ua1, ub1, ub2, uk1, uk2);
+      put_line (integer'image(start_day_index));
+      put_line (integer'image(end_day_index));
 
+      reset_chart;
+
+      build_search_set (steps, u_range, ua1, ub1, ub2, uk1, uk2);
       compute_ssrate (c,
                       start_day_index,
                       end_day_index,
@@ -274,27 +305,51 @@ package body xph_model is
                       ssrates,
                       ssrates_by_density);
 
-      characterize_best_model (model,
-                               ua1,
-                               ub1,
-                               ub2,
-                               uk1,
-                               uk2,
-                               ssrates,
-                               ssrates_by_density,
-                               minimize_by_density_state = QtChecked);
+      converging := characterize_best_model (model,
+                                             ua1,
+                                             ub1,
+                                             ub2,
+                                             uk1,
+                                             uk2,
+                                             ssrates,
+                                             ssrates_by_density,
+                                             minimize_by_density_state = QtChecked);
 
-      show_model_unknows (model);
+      if converging then
+         if refine_search then
+            declare
+               zoom_factor : float := float(QDoubleSpinBox_value (zoom_factor_value));
+               minimal_improvement_percentage : float := float(QDoubleSpinBox_value (minimal_improvement_percentage_value));
+            begin
+               zoom (c,
+                     steps,
+                     start_day_index,
+                     end_day_index,
+                     covid_data,
+                     minimize_by_density_state = QtChecked,
+                     ua1,
+                     ub1,
+                     ub2,
+                     uk1,
+                     uk2,
+                     ssrates,
+                     ssrates_by_density,
+                     model,
+                     zoom_factor,
+                     minimal_improvement_percentage);
+            end;
+         end if;
 
-      compute_simulated_rate (c, start_day_index, covid_data, model);
+         compute_simulated_rate (c, start_day_index, covid_data, model);
 
-      country_forecast_entries.clear;
-      compute_forecast (c, covid_data, forecast_ce, model);
-      country_forecast_entries := to_country_entries_vector (forecast_ce);
+         country_forecast_entries.clear;
+         compute_forecast (c, covid_data, forecast_ce, model);
+         country_forecast_entries := to_country_entries_vector (forecast_ce);
 
-      update_chart;
-      update_forecast_range_chart;
+         update_chart;
+         update_forecast_range_chart;
 
+      end if;
    end;
 
 
@@ -315,8 +370,6 @@ package body xph_model is
       end;
    begin
 
-      country_forecast_entries.clear;
-
       country_entries := filter_out_toxic_date_time;
 
       -- date
@@ -324,15 +377,12 @@ package body xph_model is
       update_min_max_date_limits;
 
       -- chart
-      --init_chart;
-      update_chart;
-      update_forecast_range_chart;
+      reset_chart;
 
    end;
 
    procedure slot_start_date_changed (date: QDateH) is
    begin
-      --init_chart;
       update_min_max_date_limits;
       update_chart;
       update_forecast_range_chart;
@@ -340,7 +390,6 @@ package body xph_model is
 
    procedure slot_end_date_changed (date: QDateH) is
    begin
-      --init_chart;
       update_min_max_date_limits;
       update_chart;
       update_forecast_range_chart;
@@ -351,171 +400,18 @@ package body xph_model is
       update_forecast_range_chart;
    end;
 
-   procedure slot_change_refine_search (state: integer) is
-      refine_search_group : QGroupBoxH := QGroupBoxH (QObject_findChild (QObjectH (form), s2qs ("refine_search_group")));
+   function refine_search_group_enabled (state: integer) return boolean is
    begin
       if state = 0 then
-         QWidget_setEnabled (QWidgetH (refine_search_group), false);
-      else
-         QWidget_setEnabled (QWidgetH (refine_search_group), true);
+         return false;
       end if;
+      return true;
+   end;
+
+   procedure slot_change_refine_search (state: integer) is
+   begin
+      QWidget_setEnabled (QWidgetH (refine_search_group), refine_search_group_enabled (state));
    end;
 
 
 end xph_model;
-
-
-
-   --  procedure slot_compute_xph is
-   --     long_p : long_process;
-   --  begin
-   --     timer := QTimer_create;
-   --
-   --     QTimer_signal_slot_timeout(handle => timer, hook => update'access);
-   --     QTimer_start (timer, 1000);
-   --     long_p.start;
-   --  end;
-
-   --  procedure slot_compute_xph is
-   --     c : country := country'val(QComboBox_currentIndex (country_choice));
-   --     i,j,k,l,m : integer := QSpinBox_value (steps_value) + 1;
-   --     size : integer := i*j*k*l*m;
-   --     covid_data : country_entries_array := to_country_entries_array (country_entries);
-   --     model : model_parameters;
-   --     minimize_by_density_state : QtCheckState :=  QCheckBox_checkState (minimize_by_density_value);
-   --     minimize_by_density : boolean;
-   --  begin
-   --
-   --     ua1 := new unknowns_array (1 .. size);
-   --     ub1 := new unknowns_array (1 .. size);
-   --     ub2 := new unknowns_array (1 .. size);
-   --     uk1 := new unknowns_array (1 .. size);
-   --     uk2 := new unknowns_array (1 .. size);
-   --
-   --     ssrates := new unknowns_array (1 .. size);
-   --     ssrates_by_density := new unknowns_array (1 .. size);
-   --
-   --     build_search_set (steps, u_range, ua1, ub1, ub2, uk1, uk2);
-   --
-   --     declare
-   --        result : boolean := compute_ssrate (c,
-   --                                            start_day_index,
-   --                                            end_day_index,
-   --                                            covid_data,
-   --                                            ua1,
-   --                                            ub1,
-   --                                            ub2,
-   --                                            uk1,
-   --                                            uk2,
-   --                                            ssrates,
-   --                                            ssrates_by_density);
-   --     begin
-   --        Put_Line ("calisss!");
-   --     end;
-   --
-   --     minimize_by_density := minimize_by_density_state = QtChecked;
-   --     characterize_best_model (model,
-   --                              ua1,
-   --                              ub1,
-   --                              ub2,
-   --                              uk1,
-   --                              uk2,
-   --                              ssrates,
-   --                              ssrates_by_density,
-   --                              minimize_by_density);
-   --     show_model_unknows (model);
-   --  end;
-
-
-
-   --  procedure update is
-   --        model : model_parameters;
-   --        minimize_by_density_state : QtCheckState :=  QCheckBox_checkState (minimize_by_density_value);
-   --        minimize_by_density : boolean;
-   --     begin
-   --     if control.are_ready then
-   --        control.set_ready (false);
-   --           minimize_by_density := minimize_by_density_state = QtChecked;
-   --           characterize_best_model (model,
-   --                                    ua1,
-   --                                    ub1,
-   --                                    ub2,
-   --                                    uk1,
-   --                                    uk2,
-   --                                    ssrates,
-   --                                    ssrates_by_density,
-   --                                    minimize_by_density);
-   --           show_model_unknows (model);
-   --        end if;
-   --     end;
-   --
-   --  task type long_process is
-   --     entry start;
-   --  end;
-   --
-   --  task body long_process is
-   --     c : country := country'val(QComboBox_currentIndex (country_choice));
-   --     i,j,k,l,m : integer := QSpinBox_value (steps_value) + 1;
-   --     size : integer := i*j*k*l*m;
-   --     covid_data : country_entries_array := to_country_entries_array (country_entries);
-   --  begin
-   --
-   --     ua1 := new unknowns_array (1 .. size);
-   --     ub1 := new unknowns_array (1 .. size);
-   --     ub2 := new unknowns_array (1 .. size);
-   --     uk1 := new unknowns_array (1 .. size);
-   --     uk2 := new unknowns_array (1 .. size);
-   --
-   --     ssrates := new unknowns_array (1 .. size);
-   --     ssrates_by_density := new unknowns_array (1 .. size);
-   --
-   --     control.set_ready (false);
-   --     accept start;
-   --     build_search_set (steps, u_range, ua1, ub1, ub2, uk1, uk2);
-   --     --  compute_ssrate (c,
-   --     --                  start_day_index,
-   --     --                  end_day_index,
-   --     --                  covid_data,
-   --     --                  ua1,
-   --     --                  ub1,
-   --     --                  ub2,
-   --     --                  uk1,
-   --     --                  uk2,
-   --     --                  ssrates,
-   --     --                  ssrates_by_density);
-   --     control.set_ready (true);
-   --  end;
-
-
-   --  protected control is
-   --     procedure set_ready (ready : boolean);
-   --     function are_ready return boolean;
-   --
-   --     procedure set_abort (stop : boolean);
-   --     function get_abort return boolean;
-   --  private
-   --     results_ready : boolean := false;
-   --     asked_abort : boolean := false;
-   --  end;
-   --
-   --  protected body control is
-   --     procedure set_ready (ready : boolean) is
-   --     begin
-   --        results_ready := ready;
-   --     end;
-   --
-   --     function are_ready return boolean is
-   --     begin
-   --        return results_ready;
-   --     end;
-   --
-   --     procedure set_abort (stop : boolean) is
-   --     begin
-   --        asked_abort := stop;
-   --     end;
-   --
-   --     function get_abort return boolean is
-   --     begin
-   --        return asked_abort;
-   --     end;
-   --  end;
