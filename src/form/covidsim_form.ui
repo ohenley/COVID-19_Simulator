@@ -113,11 +113,14 @@
         </item>
         <item row="11" column="0">
          <widget class="QCheckBox" name="refine_search">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="text">
            <string>Refine Unknowns Search</string>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -137,7 +140,7 @@
         <item row="16" column="0" colspan="3">
          <widget class="QGroupBox" name="refine_search_group">
           <property name="enabled">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <property name="title">
            <string>Search Parameters</string>

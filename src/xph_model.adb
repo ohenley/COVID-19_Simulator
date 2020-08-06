@@ -3,6 +3,7 @@ with Ada.Containers; use Ada.Containers;
 
 with Ada.Calendar.Arithmetic; use Ada.Calendar.Arithmetic;
 with Ada.Calendar; use Ada.Calendar;
+with Ada.Calendar.Formatting;
 
 with xph_covid19; use xph_covid19;
 with xph_covid19.data; use xph_covid19.data;
@@ -142,21 +143,21 @@ package body xph_model is
       init_series;
 
       -- ground truths
-      for e of country_entries loop
+      for e in country_entries.first_index .. country_entries.last_index loop
 
-         if ada.calendar.arithmetic."-" (start_time, e.date) > 0 then
-            QXYSeries_append (country_ground_truth_first, qreal(e.day_index), qreal(e.cumulative_cases));
-         elsif ada.calendar.arithmetic."-" (e.date, end_time) > 0 then
-            QXYSeries_append (country_ground_truth_last, qreal(e.day_index), qreal(e.cumulative_cases));
+         if ada.calendar.arithmetic."-" (start_time, country_entries(e).date) > 0 then
+            QXYSeries_append (country_ground_truth_first, qreal(e), qreal(country_entries(e).cumulative_cases));
+         elsif ada.calendar.arithmetic."-" (country_entries(e).date, end_time) > 0 then
+            QXYSeries_append (country_ground_truth_last, qreal(e), qreal(country_entries(e).cumulative_cases));
          else
-            QXYSeries_append (country_ground_truth_date_range, qreal(e.day_index), qreal(e.cumulative_cases));
+            QXYSeries_append (country_ground_truth_date_range, qreal(e), qreal(country_entries(e).cumulative_cases));
          end if;
 
       end loop;
 
       -- forecast
-      for f of country_forecast_entries loop
-         QXYSeries_append (country_forecast, qreal(f.day_index), qreal(f.cumulative_cases_simulated));
+      for f in country_forecast_entries.first_index .. country_forecast_entries.last_index loop
+         QXYSeries_append (country_forecast, qreal(f), qreal(country_forecast_entries(f).cumulative_cases_simulated));
       end loop;
 
 
@@ -198,10 +199,21 @@ package body xph_model is
    end;
 
    procedure set_initial_date_limits is
-      start_time : Time := country_entries.first_element.date;
-      start_date : QDateH := QDate_create (year (start_time), month (start_time), day (start_time));
+
+      function find_first_case_date return integer is
+      begin
+         for i in country_entries.first_index .. country_entries.last_index loop
+            if country_entries.element (i).cumulative_cases > 0.0 then
+               return i;
+            end if;
+         end loop;
+         return -1;
+      end;
+
+      start_time : Time := country_entries.element(find_first_case_date).date;
+      start_date : QDateH := QDate_create (Ada.Calendar.Formatting.year (start_time), Ada.Calendar.Formatting.month (start_time), Ada.Calendar.Formatting.day (start_time));
       end_time : Time := country_entries.last_element.date;
-      end_date : QDateH := QDate_create (year (end_time), month (end_time), day (end_time));
+      end_date : QDateH := QDate_create (Ada.Calendar.Formatting.year (end_time), Ada.Calendar.Formatting.month (end_time), Ada.Calendar.Formatting.day (end_time));
    begin
       QDateTimeEdit_setMinimumDate (start_date_value, start_date);
       QDateTimeEdit_setDate (start_date_value, start_date);
@@ -210,17 +222,20 @@ package body xph_model is
       QDateTimeEdit_setMaximumDate (end_date_value, end_date);
    end;
 
-   function get_maximum_start_time(end_time : time) return Time is
-   begin
-      return ada.calendar.arithmetic."-" (end_time, 5);
-   end;
 
-   function get_minimum_end_time (start_time : time) return Time is
-   begin
-      return ada.calendar.arithmetic."+" (start_time, 5);
-   end;
 
    procedure update_min_max_date_limits is
+
+      function get_maximum_start_time(end_time : time) return Time is
+      begin
+         return ada.calendar.arithmetic."-" (end_time, 5);
+      end;
+
+      function get_minimum_end_time (start_time : time) return Time is
+      begin
+         return ada.calendar.arithmetic."+" (start_time, 5);
+      end;
+
       start_date : QDateH := QDateTimeEdit_date (start_date_value);
       start_time : Time := time_of (QDate_year (start_date), QDate_month (start_date), QDate_day (start_date));
 
@@ -246,17 +261,17 @@ package body xph_model is
       covid_data : country_entries_array := to_country_entries_array (country_entries);
 
       start_date : QDateH := QDateTimeEdit_date (start_date_value);
-      start_time : Time := time_of (QDate_year (start_date), QDate_month (start_date), QDate_day (start_date));
+      start_time : Time := Ada.Calendar.Formatting.time_of (QDate_year (start_date), QDate_month (start_date), QDate_day (start_date));
 
       end_date : QDateH := QDateTimeEdit_date (end_date_value);
-      end_time : Time := time_of (QDate_year (end_date), QDate_month (end_date), QDate_day (end_date));
+      end_time : Time := Ada.Calendar.Formatting.time_of (QDate_year (end_date), QDate_month (end_date), QDate_day (end_date));
 
 
       function get_date_index (date_time : time) return integer is
       begin
          for i in covid_data'range loop
             if covid_data (i).date = date_time then
-               return integer(covid_data (i).day_index);
+               return i;
             end if;
          end loop;
 
@@ -284,15 +299,17 @@ package body xph_model is
       forecast_value : integer := QSpinBox_value (forecast_days_value);
       forecast_ce : country_entries_array (1 .. forecast_value);
       refine_search : boolean := QWidget_isEnabled (QWidgetH (refine_search_group));
-      converging : boolean;
    begin
 
-      put_line (integer'image(start_day_index));
-      put_line (integer'image(end_day_index));
+      --put_line (integer'image(start_day_index));
+      --put_line (integer'image(end_day_index));
 
       reset_chart;
 
       build_search_set (steps, u_range, ua1, ub1, ub2, uk1, uk2);
+
+      --Put_Line (integer'image(ua1'Length));
+
       compute_ssrate (c,
                       start_day_index,
                       end_day_index,
@@ -305,51 +322,49 @@ package body xph_model is
                       ssrates,
                       ssrates_by_density);
 
-      converging := characterize_best_model (model,
-                                             ua1,
-                                             ub1,
-                                             ub2,
-                                             uk1,
-                                             uk2,
-                                             ssrates,
-                                             ssrates_by_density,
-                                             minimize_by_density_state = QtChecked);
+      characterize_best_model (model,
+                               ua1,
+                               ub1,
+                               ub2,
+                               uk1,
+                               uk2,
+                               ssrates,
+                               ssrates_by_density,
+                               minimize_by_density_state = QtChecked);
 
-      if converging then
-         if refine_search then
-            declare
-               zoom_factor : float := float(QDoubleSpinBox_value (zoom_factor_value));
-               minimal_improvement_percentage : float := float(QDoubleSpinBox_value (minimal_improvement_percentage_value));
-            begin
-               zoom (c,
-                     steps,
-                     start_day_index,
-                     end_day_index,
-                     covid_data,
-                     minimize_by_density_state = QtChecked,
-                     ua1,
-                     ub1,
-                     ub2,
-                     uk1,
-                     uk2,
-                     ssrates,
-                     ssrates_by_density,
-                     model,
-                     zoom_factor,
-                     minimal_improvement_percentage);
-            end;
-         end if;
-
-         compute_simulated_rate (c, start_day_index, covid_data, model);
-
-         country_forecast_entries.clear;
-         compute_forecast (c, covid_data, forecast_ce, model);
-         country_forecast_entries := to_country_entries_vector (forecast_ce);
-
-         update_chart;
-         update_forecast_range_chart;
-
+      if refine_search then
+         declare
+            zoom_factor : float := float(QDoubleSpinBox_value (zoom_factor_value));
+            minimal_improvement_percentage : float := float(QDoubleSpinBox_value (minimal_improvement_percentage_value));
+         begin
+            zoom (c,
+                  steps,
+                  start_day_index,
+                  end_day_index,
+                  covid_data,
+                  minimize_by_density_state = QtChecked,
+                  ua1,
+                  ub1,
+                  ub2,
+                  uk1,
+                  uk2,
+                  ssrates,
+                  ssrates_by_density,
+                  model,
+                  zoom_factor,
+                  minimal_improvement_percentage);
+         end;
       end if;
+
+      compute_simulated_rate (c, start_day_index, covid_data, model);
+
+      country_forecast_entries.clear;
+      compute_forecast (c, covid_data, forecast_ce, model);
+      country_forecast_entries := to_country_entries_vector (forecast_ce);
+
+      update_chart;
+      update_forecast_range_chart;
+
    end;
 
 
@@ -359,8 +374,9 @@ package body xph_model is
       raw_ce : country_entries_array := get_country_data (data_filename, c);
       ce : country_entries_array := sanitize_covid_data (raw_ce, all_countries (c));
 
+
       function filter_out_toxic_date_time return country_entries_vector.vector is
-         toxic_date : Time := time_of (2019, 12, 31);
+         toxic_date : Time := Ada.Calendar.Formatting.time_of (2019, 12, 31);
       begin
          if ce (ce'first).date = toxic_date then
             return to_country_entries_vector (ce (ce'first + 1 .. ce'last));
@@ -374,7 +390,7 @@ package body xph_model is
 
       -- date
       set_initial_date_limits;
-      update_min_max_date_limits;
+      --update_min_max_date_limits;
 
       -- chart
       reset_chart;
