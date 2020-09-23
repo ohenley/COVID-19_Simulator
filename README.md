@@ -33,7 +33,7 @@ Multi algorithms COVID-19 simulator. Ada, Qt code under the hood. :astonished: ð
 <!---![alt text](https://github.com/ohenley/readme-template/blob/master/thug_war.png)--->
 
 ## Status
-- Feature complete.
+- Usable, WIP.
 - Works on MS-Windows-10
 - Not working on Linux (planned as Qt and Ada are both portable)
 
