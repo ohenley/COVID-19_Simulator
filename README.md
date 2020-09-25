@@ -20,7 +20,7 @@ Multi algorithms COVID-19 simulator. Ada, Qt code under the hood. :astonished: ð
 <div align="center">
 
 <a>
-<img border="0" src="https://github.com/ohenley/covidsim/blob/master/covidsim.png" style="max-width:100%;">
+<img border="0" src="https://github.com/ohenley/covidsim/blob/master/xph_uk_run.gif" style="max-width:100%;">
 </a>
   
 </div>
