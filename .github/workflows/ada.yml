@@ -21,7 +21,7 @@ jobs:
     - name: Set up GNAT toolchain
       run: >
         sudo apt-get update && 
-        sudo apt-get install gnat gprbuild make "libqt5*"
+        sudo apt-get install gnat gprbuild make qt5-default
 
 
     - name: Build
