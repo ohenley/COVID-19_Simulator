@@ -26,3 +26,17 @@ jobs:
 
     - name: Build
       run: make
+
+    - name: Build AppImage
+      run: make AppImage
+
+
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: True
+        tag: continuous
+        name: Continuous build
+        prerelease: True
+        artifacts: "COVID*.AppImage"
+        token: ${{ secrets.GITHUB_TOKEN }}
