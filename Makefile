@@ -1,22 +1,22 @@
-all: | qt5adax86-64
+QT_VERSION = 5.15
+
+all: | linux/qt5adax86-64 linux/qt-$(QT_VERSION)x86-64
 	gprbuild -p covidsim.gpr
 
-qt5adax86-64:
+linux/qt5adax86-64:
+	mkdir -p linux
 	wget -nv -c https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5adax86-64.tar.bz2
-	tar -xf qt5adax86-64.tar.bz2
+	tar -C linux -xf qt5adax86-64.tar.bz2
+
+linux/qt-$(QT_VERSION)x86-64:
+	mkdir -p linux
+	wget -nv -c https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt$(QT_VERSION)x86-64.tar.bz2
+	tar -C linux -xf qt$(QT_VERSION)x86-64.tar.bz2
 
 run:
-	LD_LIBRARY_PATH="qt5adax86-64/qt5adax86-64/usr/local/lib" bin/covidsim
+	cd linux/qt-$(QT_VERSION)x86-64/usr/local/Qt-$(QT_VERSION).0/lib ; \
+    LD_LIBRARY_PATH=".:$(PWD)/linux/qt5adax86-64/qt5adax86-64/usr/local/lib" ./covidsim
 
 clean:
-	rm -f qt5adax86-64.tar.bz2
-	rm -rf qt5adax86-64
 	gprclean covidsim.gpr
-
-AppImage:
-	wget -nv -c https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-	chmod +x linuxdeploy-x86_64.AppImage
-	./linuxdeploy-x86_64.AppImage --executable bin/covidsim \
-	--library qt5adax86-64/qt5adax86-64/usr/local/lib/libqt5c.so \
-	--desktop-file distri/covidsim.desktop \
-	--appdir AppDir --output appimage
+	rm -rf linux
