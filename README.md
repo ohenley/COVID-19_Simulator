@@ -35,7 +35,7 @@ Multi algorithms COVID-19 simulator. Ada, Qt code under the hood. :astonished: ð
 ## Status
 - Usable, WIP.
 - Works on MS-Windows-10
-- Not working on Linux (planned as Qt and Ada are both portable)
+- Works on Ubuntu Linux 18.04 LTS (not with native packages but using the libraries provided by [upstream qt5ada](https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html))
 
 ## Prerequisites
 - MS-Windows platform
@@ -57,7 +57,7 @@ Multi algorithms COVID-19 simulator. Ada, Qt code under the hood. :astonished: ð
 ```
 #### Ubuntu Linux
 ```
-$ sudo apt install gnat-7 gprbuild make "libqt5*"
+$ sudo apt install gnat-7 gprbuild make
 $ git clone --recursive https://github.com/ohenley/covidsim.git
 $ cd covidsim
 $ make
