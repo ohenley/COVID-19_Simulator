@@ -12,3 +12,11 @@ clean:
 	rm -f qt5adax86-64.tar.bz2
 	rm -rf qt5adax86-64
 	gprclean covidsim.gpr
+
+AppImage:
+	wget -nv -c https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+	chmod +x linuxdeploy-x86_64.AppImage
+	./linuxdeploy-x86_64.AppImage --executable bin/covidsim \
+	--library qt5adax86-64/qt5adax86-64/usr/local/lib/libqt5c.so \
+	--desktop-file distri/covidsim.desktop \
+	--appdir AppDir --output appimage
