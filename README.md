@@ -55,6 +55,13 @@ Multi algorithms COVID-19 simulator. Ada, Qt code under the hood. :astonished: ð
 > cd covidsim
 > gprbuild covidsim.gpr
 ```
+#### Ubuntu Linux
+```
+$ sudo apt install gnat-7 gprbuild make "libqt5*"
+$ git clone --recursive https://github.com/ohenley/covidsim.git
+$ cd covidsim
+$ make
+```
 
 ## Limitations
 None so far.
@@ -64,6 +71,10 @@ None so far.
 ```
 > cd deps/qt5ada/qt5/5.15/bin
 > ./covidsim.exe
+```
+#### Linux
+```
+$ make run
 ```
 
 ## Acknowledgments
