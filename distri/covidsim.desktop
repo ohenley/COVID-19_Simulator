@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=COVID-19 Simulator
+Comment=Qt5 COVID-19 simulator. Ada code under the hood.
+Exec=covidsim
+Icon=covidsim
+Terminal=true
+Type=Application
+Categories=Science;

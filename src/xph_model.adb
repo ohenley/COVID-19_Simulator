@@ -45,7 +45,7 @@ with Qt.QAbstractSeries; use Qt.QAbstractSeries;
 
 package body xph_model is
 
-   data_filename : string := "../../../../../deps/xph_covid19/data/covid19.csv";
+   data_filename : string := "../../../../../../deps/xph_covid19/data/covid19.csv";
 
    bend : integer := 1; -- array index for bend in forecast_ce
    first_case : integer := 6; -- arr. index in forecast_ce when 1'st case appeared

@@ -1,13 +1,31 @@
 with "deps/xph_covid19/xph_covid19.gpr";
 
 project covidsim is
+
+    type T_OS is ("Windows_NT", "Linux");
+    V_OS : T_OS := external ("OS", "Linux");
+
     for Source_Dirs use ("src", "deps/mathpaqs/diff_eq/ode", "deps/qt5ada/src");
     for Object_Dir use "obj";
-    for Exec_Dir use "deps/qt5ada/qt5/5.15/bin";
-    --for Exec_Dir use "bin";
+
+    case V_OS is
+    when "Windows_NT" =>
+        for Exec_Dir use "deps/qt5ada/qt5/5.15/bin";
+    when "Linux" =>
+        for Exec_Dir use "linux/qt-5.15x86-64/usr/local/Qt-5.15.0/lib";
+    end case;
+
     for Main use ("covidsim.adb");
 
     package Linker is
-        for Default_Switches ("Ada") use ("-Ldeps\qt5ada\binaries\windows", "-lqt5c");
+       case V_OS is
+       when "Windows_NT" =>
+           for Default_Switches ("Ada") use ("-Ldeps\qt5ada\binaries\windows", "-lqt5c");
+       when "Linux" =>
+           for Default_Switches ("Ada") use
+              ("-Llinux/qt-5.15x86-64/usr/local/Qt-5.15.0/lib",
+               "-Llinux/qt5adax86-64/qt5adax86-64/usr/local/lib", "-lqt5c",
+               "-Wl,--unresolved-symbols=ignore-in-shared-libs");
+      end case;
     end Linker;
 end covidsim;

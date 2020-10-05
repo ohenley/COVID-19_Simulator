@@ -208,7 +208,7 @@ package body CovidSimForm is
    procedure covidsim_form_init (parent : QWidgetH := null) is
    begin
       -- create the UI based on QTDesigner .ui file specification
-      covidsim_form := QUiLoader_loadFromFile (QUiLoader_create, s2qs (Current_Directory & "../../../../../../src/form/covidsim_form.ui"));
+      covidsim_form := QUiLoader_loadFromFile (QUiLoader_create, s2qs ("../../../../../../src/form/covidsim_form.ui"));
 
       -- fetch and 'cache' the widgets we want to manipulate, by name, from our .ui design
       graphic_view := QGraphicsViewH (QObject_findChild (QObjectH (covidsim_form), s2qs ("graphic_view")));

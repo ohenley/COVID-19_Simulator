@@ -1,0 +1,42 @@
+name: Ada (GNAT)
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Checkout submodules
+      uses: textbook/git-checkout-submodule-action@master
+  
+    - name: Set up GNAT toolchain
+      run: >
+        sudo apt-get update && 
+        sudo apt-get install gnat gprbuild make "libqt5*5" libpulse-dev
+
+
+    - name: Build
+      run: make
+
+    - name: Build AppImage
+      run: make AppImage
+
+
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: True
+        tag: continuous
+        name: Continuous build
+        prerelease: True
+        artifacts: "COVID*.AppImage"
+        token: ${{ secrets.GITHUB_TOKEN }}
