@@ -38,7 +38,6 @@ Multi algorithms COVID-19 simulator. Ada, Qt code under the hood. :astonished: ð
 - Works on Ubuntu Linux 18.04 LTS (not with native packages but using the libraries provided by [upstream qt5ada](https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html))
 
 ## Prerequisites
-- MS-Windows platform
 - [git](https://git-scm.com/download/win)
 - [gnat-ce](https://www.adacore.com/download) (tested with 2019, 2020).
 
@@ -64,7 +63,7 @@ $ make
 ```
 
 ## Limitations
-None so far.
+See issues board.
 
 ## Usage
 #### MS-Windows-10
