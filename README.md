@@ -1,5 +1,5 @@
 # COVID-19 Simulator
-Multi algorithms COVID-19 simulator. Ada, Qt code under the hood. :astonished: 🤯 :metal:
+Multi engine/algorithms COVID-19 simulator. Ada, Qt code under the hood. :astonished: 🤯 :metal:
 
 ## Table of Contents
 <details>
