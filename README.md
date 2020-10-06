@@ -78,7 +78,7 @@ $ make run
 
 ## Acknowledgments
 - Based on simulation work by https://github.com/zertovitch
-- Based on simulation work by [XPH Pharmaceutical](https://xph.co.nz/)
+- Based on simulation work by [XPH Pharmaceutical](https://xph.co.nz/), original Ada code by Anatoly Chernyshev
 - Using a custom packaged version of qt5ada thick binding by [Leonid Dulman](https://r3fowwcolhrzycn2yzlzzw-on.drv.tw/AdaStudio/qtada/qt5ada.html)
 
 A big thanks to everyone!
