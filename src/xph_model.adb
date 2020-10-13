@@ -28,6 +28,9 @@ with Qt.QColor; use Qt.QColor;
 with Qt.QPoint; use Qt.QPoint;
 with Qt.QTimer; use Qt.QTimer;
 with Qt.QCheckBox; use Qt.QCheckBox;
+with Qt.QApplication; use Qt.QApplication;
+with Qt.QNamespace; use Qt.QNamespace;
+with Qt.QCursor; use Qt.QCursor;
 
 with Qt.QScatterSeries;      use Qt.QScatterSeries;
 
@@ -303,6 +306,7 @@ package body xph_model is
 
       --put_line (integer'image(start_day_index));
       --put_line (integer'image(end_day_index));
+      QApplication_setOverrideCursor(QCursor_create(WaitCursor));
 
       reset_chart;
 
@@ -365,6 +369,7 @@ package body xph_model is
       update_chart;
       update_forecast_range_chart;
 
+      QApplication_restoreOverrideCursor;
    end;
 
 
