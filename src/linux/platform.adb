@@ -2,8 +2,6 @@ with Ada.Directories; use Ada.Directories;
 
 package body platform is
 
-begin
-
    function get_ui_specification_filepath return string is
    begin
       return "../../../../../../src/form/covidsim_form.ui";
