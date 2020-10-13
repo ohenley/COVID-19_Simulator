@@ -1,6 +1,6 @@
 with Ada.Directories; use Ada.Directories;
 
-procedure body platform is
+package body platform is
 
 begin
 
