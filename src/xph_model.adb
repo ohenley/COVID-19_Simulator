@@ -41,14 +41,15 @@ with Qt.QPainter;        use Qt.QPainter;
 with Qt.QGradient;       use Qt.QGradient;
 with Qt.QAbstractSeries; use Qt.QAbstractSeries;
 
+with platform; use platform;
+
 -- TODO:
 -- 1. implement progress bar, feedback and cancel.
 -- 2. proper legend
--- 3. redraw ui when changing country
 
 package body xph_model is
 
-   data_filename : string := "../../../../../../deps/xph_covid19/data/covid19.csv";
+   data_filename : string := get_covid_raw_data_filepath;
 
    bend : integer := 1; -- array index for bend in forecast_ce
    first_case : integer := 6; -- arr. index in forecast_ce when 1'st case appeared

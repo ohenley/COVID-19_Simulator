@@ -1,6 +1,5 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Text_IO; use Ada.Text_IO;
-with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions;  use Ada.Exceptions;
 
 with Qt.QObject; use Qt.QObject;
@@ -31,10 +30,8 @@ with Qt.QStackedWidget; use Qt.QStackedWidget;
 with Qt.QDateTime; use Qt.QDateTime;
 with Qt.QCheckBox; use Qt.QCheckBox;
 
-
+with platform; use platform;
 with covid_19; use covid_19;
-
-
 with xph_model; use xph_model;
 
 package body CovidSimForm is
@@ -208,7 +205,7 @@ package body CovidSimForm is
    procedure covidsim_form_init (parent : QWidgetH := null) is
    begin
       -- create the UI based on QTDesigner .ui file specification
-      covidsim_form := QUiLoader_loadFromFile (QUiLoader_create, s2qs ("../../../../../../src/form/covidsim_form.ui"));
+      covidsim_form := QUiLoader_loadFromFile (QUiLoader_create, s2qs (get_ui_specification_filepath));
 
       -- fetch and 'cache' the widgets we want to manipulate, by name, from our .ui design
       graphic_view := QGraphicsViewH (QObject_findChild (QObjectH (covidsim_form), s2qs ("graphic_view")));
