@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd $APPDIR/linux/qt-5.15x86-64/usr/local/Qt-5.15.0/lib
+exec $APPDIR/usr/bin/covidsim $@
