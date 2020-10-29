@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
 
     steps:
     - name: Checkout
@@ -20,9 +20,8 @@ jobs:
   
     - name: Set up GNAT toolchain
       run: >
-        sudo apt-get update && 
-        sudo apt-get install gnat gprbuild make "libqt5*5" libpulse-dev
-
+        sudo apt-get update &&
+        sudo apt-get install gnat gprbuild make qt5-default qt5-qmake qtbase5-dev-tools qt3d5-dev "qt5-*plugins" "qt3d-*-plugin" "libqt5*5" "libqt5*5-plugins" libspeechd2 libpulse-dev
 
     - name: Build
       run: make
